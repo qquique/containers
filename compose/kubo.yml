@@ -1,0 +1,13 @@
+services:
+  kubo:
+    image: docker.io/ipfs/kubo:latest
+    container_name: kubo
+    environment:
+      - TZ=America/Lima
+    ports:
+      - 4001:4001
+      - 8080:8080
+      - 5001:5001
+    volumes:
+      - ~/Software/ipfs/export:/export
+      - ~/Software/ipfs/data:/data/ipfs
