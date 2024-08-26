@@ -1,0 +1,14 @@
+services:
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: openwebui
+    environment:
+      - TZ=America/Lima
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ~/Software/openwebui/:/app/backend/data
+    ports:
+      - 3000:8080
+    extra_hosts:
+      - host.docker.internal:host-gateway
