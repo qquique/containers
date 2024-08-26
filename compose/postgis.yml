@@ -1,0 +1,12 @@
+services:
+  postgis:
+    image: docker.io/postgis/postgis
+    container_name: postgis_latest
+    environment:
+      - TZ=America/Lima
+      - PUID=1000
+      - PGID=1000
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5432:5432
