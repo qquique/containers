@@ -12,3 +12,17 @@ services:
       - 3000:8080
     extra_hosts:
       - host.docker.internal:host-gateway
+
+  openwebui-pipelines:
+    image: ghcr.io/open-webui/pipelines:main
+    container_name: openwebui-pipelines
+    environment:
+      - TZ=America/Lima
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ~/Software/openwebui-pipelines/:/app/pipelines
+    ports:
+      - 9099:9099
+    extra_hosts:
+      - host.docker.internal:host-gateway
