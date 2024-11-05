@@ -1,0 +1,21 @@
+services:
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    environment:
+        - PUID=1000
+        - PGID=1000
+        - TZ=America/Lima
+        - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+        - ~/Software/ollama/:/root/.ollama
+    ports:
+      - 11434:11434
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
