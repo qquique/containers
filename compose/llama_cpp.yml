@@ -1,0 +1,23 @@
+---
+services:
+  llamacpp:
+    image: ghcr.io/ggerganov/llama.cpp:full-cuda
+    container_name: llamacpp
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Lima
+    volumes:
+      - ~/Software/llamacpp/models:/models
+    ports:
+      - 8012:8012
+    #    command: --all-in-one "/models/" 7B
+    command: --server -m /models/1b/qwen2.5-coder-1.5b-q8_0.gguf --port 8012 --host 0.0.0.0 -ngl 99 -fa -ub 1024 -b 1024 -dt 0.1 --ctx-size 0 --cache-reuse 256
+    # command: --server -m /models/3b/qwen2.5-coder-3b-q8_0.gguf --port 8012 --host 0.0.0.0 -ngl 99 -fa -ub 1024 -b 1024 -dt 0.1 --ctx-size 0 --cache-reuse 256
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
