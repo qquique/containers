@@ -1,0 +1,54 @@
+---
+services:
+  jenkins:
+    build: ./controller
+    image: myjenkins-blueocean:2.492.2-1
+    container_name: jenkins-blueocean
+    privileged: true
+    environment:
+      - TZ=America/Lima
+      - DOCKER_TLS_CERTDIR=/certs
+      - DOCKER_HOST=tcp://jenkins-docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+    volumes:
+      - jenkins-docker-certs:/certs/client:ro
+      - jenkins-data:/var/jenkins_home
+    ports:
+      - 9090:8080
+      - 50000:50000
+    networks:
+      - jenkins
+
+  jenkins-agent:
+    build: ./agent
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - jenkins-agent-data:/home/jenkins:rw
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+    networks:
+      - jenkins
+
+  jenkins-docker:
+    image: docker:dind
+    container_name: jenkins-docker
+    privileged: true
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+    networks:
+      - jenkins
+    volumes:
+      - jenkins-docker-certs:/certs/client
+      - jenkins-data:/var/jenkins_home
+    ports:
+      - 2376:2376
+
+volumes:
+  jenkins-docker-certs:
+  jenkins-data:
+  jenkins-agent-data:
+
+networks:
+  jenkins:
+    driver: bridge
