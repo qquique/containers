@@ -1,0 +1,26 @@
+[Unit]
+Description=pihole
+
+[Container]
+Image=pihole/pihole:latest
+ContainerName=pihole
+Environment=DNSMASQ_LISTENING=all
+Environment=TZ=America/Lima
+Secret=my_secret
+# 127.0.1.1 to not conflict with dns resolution between containers (compose)
+# should be also configured as nameserver in /etc/resolv.conf 
+PublishPort=127.0.1.1:53:53/tcp
+PublishPort=127.0.1.1:53:53/udp
+PublishPort=80:80/udp
+PublishPort=80:80/tcp
+Network=dns.network
+IP=172.17.0.5
+Volume=%h/.config/containers/storage/pihole/etc-pihole:/etc/pihole
+Volume=%h/.config/containers/storage/pihole/etc-dnsmasq.d:/etc/dnsmasq.d
+Volume=%h/.config/containers/storage/pihole/logs:/var/log/pihole/pihole_debug.log
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target default.target

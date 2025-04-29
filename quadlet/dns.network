@@ -1,0 +1,6 @@
+[Network]
+NetworkName=dns
+Subnet=172.17.0.0/16
+
+[Install]
+WantedBy=default.target
